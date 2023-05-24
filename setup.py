@@ -13,7 +13,7 @@ from setuptools import find_packages, setup, Command
 
 # Package meta-data.
 NAME = 'progress_runner'
-DESCRIPTION = 'A package manager for KiCad projects'
+DESCRIPTION = 'an ncurses process runner with progress display'
 URL = 'https://github.com/danroblewis/progress_runner'
 EMAIL = 'daniel.robert.lewis@gmail.com'
 AUTHOR = 'Daniel Lewis'
@@ -107,7 +107,7 @@ setup(
     # py_modules=['mypackage'],
 
     entry_points={
-        'console_scripts': ['progress_runner=progress_runner:cli'],
+        'console_scripts': ['progress_runner=progress_runner.progress_runner:main'],
     },
     install_requires=REQUIRED,
     extras_require=EXTRAS,

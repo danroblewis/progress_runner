@@ -2,7 +2,8 @@ import curses
 import time
 import asyncio
 import argparse
-
+import importlib.util
+import sys
 
 def make_color(num, color):
     curses.init_pair(num, color, curses.COLOR_BLACK)
@@ -127,15 +128,7 @@ def main():
 
     args = parser.parse_args()
 
-    if args._command is None:
-        parser.print_help()
-        return
-
-
-
-    import importlib.util
-    import sys
-    spec = importlib.util.spec_from_file_location("module.name", py_filepath)
+    spec = importlib.util.spec_from_file_location("module.name", args.py_filepath)
     foo = importlib.util.module_from_spec(spec)
     sys.modules["module.name"] = foo
     spec.loader.exec_module(foo)
@@ -143,9 +136,13 @@ def main():
     async def inner_fn(param):
         return await foo.work(param)
 
-    with open(param_filepath) as f:
+    with open(args.param_filepath) as f:
         params = f.read().splitlines()
 
     nthreads = int(args.nthreads) if args.nthreads else 5
 
-    p = ProgressRunner(inner_fn, params, nthreads)
+    run(foo.work, params, nthreads)
+
+
+if __name__ == "__main__":
+    main()
